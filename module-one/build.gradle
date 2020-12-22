@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+sourceSets {
+    integration {
+    }
+}
+
+dependencies {
+    testImplementation(
+            "org.junit.jupiter:junit-jupiter-params:5.3.1",
+            "org.assertj:assertj-core:3.11.1",
+            'io.rest-assured:rest-assured:3.3.0'
+    )
+}
+
+task testTask(type: Test) {
+    description 'Run api integration tests. This task has implicit dependency on dockerCompose task in ' +
+            'tw2/integration directory.'
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+    outputs.upToDateWhen { false }
+}

@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'com.avast.gradle.docker-compose' version "0.9.5"
+}
+
+def otherTask = project(':module-one').getTasksByName('testTask', false)[0]
+
+dockerCompose {
+    integration {
+        useComposeFiles = ['docker-compose-backend.yml']
+        isRequiredBy(otherTask)
+    }
+}
+
+otherTask.doFirst {
+    dockerCompose.integration.exposeAsEnvironment(otherTask)
+}
+
+task testTask {
+    sleep(2000)
+}
